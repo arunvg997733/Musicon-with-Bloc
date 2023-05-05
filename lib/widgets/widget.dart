@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:get/route_manager.dart';
+import 'package:musicon/List/songnotifierlist.dart';
+import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/function/function.dart';
 import 'package:musicon/model/songsmodel.dart';
+import 'package:musicon/player/playercontroller.dart';
 import 'package:musicon/screen/nowplayingscreen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -7,13 +12,78 @@ Widget headtext(String text){
 return Text(text,style: const TextStyle(fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold),);
 }
 
-Widget songbar( Songsmodel data,context){
+
+class songlistbar extends StatefulWidget {
+   songlistbar({super.key,required this.data,required this.context,required this.index,required this.songlist});
+
+  Songsmodel data;
+  BuildContext context;
+  int index;
+  List songlist;
+
+  @override
+  State<songlistbar> createState() => _songlistbarState();
+}
+
+class _songlistbarState extends State<songlistbar> {
+  @override
+  Widget build(BuildContext context) {
+    bool isfavouritecheck = favouritechecking(widget.data);
+    return ClipRRect(
+    borderRadius: BorderRadius.circular(50),
+    child: Container(
+      color: const Color.fromARGB(204, 158, 158, 158),
+      child:  ListTile(
+        onTap: () {
+          playsong(widget.index,widget.songlist);
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:widget.data)));
+        },
+        leading: CircleAvatar(
+        radius: 25,
+        child: QueryArtworkWidget(id:widget.data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
+        title: Text(widget.data.name,overflow:TextOverflow.ellipsis,),
+        subtitle: Text(widget.data.artist,overflow: TextOverflow.ellipsis,),
+        trailing: Wrap(
+          children: [
+            IconButton(onPressed: () {
+
+            }, icon: const Icon(Icons.playlist_add)),
+            IconButton(onPressed: () {
+              setState(() {
+                if(isfavouritecheck == false){
+                  addtofavoritedatabase(widget.data,context);
+                  
+                }else{
+                  deletefavouritelistontap(widget.data);
+                  
+                }
+                
+              });
+              
+              
+            }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
+
+          ],
+        )
+      
+      ),
+    ),
+  );
+  }
+}
+
+Widget songbar( Songsmodel data,context,int index,List songlist){
+
+  // isfavouritecheck.value = favouritechecking(data);
+  bool isfavouritecheck = favouritechecking(data);
+
   return ClipRRect(
     borderRadius: BorderRadius.circular(50),
     child: Container(
       color: const Color.fromARGB(204, 158, 158, 158),
       child:  ListTile(
         onTap: () {
+          playsong(index,songlist);
           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
         },
         leading: CircleAvatar(
@@ -24,11 +94,12 @@ Widget songbar( Songsmodel data,context){
         trailing: Wrap(
           children: [
             IconButton(onPressed: () {
-              
+
             }, icon: const Icon(Icons.playlist_add)),
             IconButton(onPressed: () {
+              addtofavoritedatabase(data,context);
               
-            }, icon: const Icon(Icons.favorite_border),)
+            }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
 
           ],
         )
@@ -81,4 +152,59 @@ Widget settingstext(String text,IconData icon){
     ],
   );
 
+}
+
+Widget songbar2( Songsmodel data,context,int index,List newlist){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(50),
+    child: Container(
+      color: const Color.fromARGB(204, 158, 158, 158),
+      child:  ListTile(
+        onTap: () {
+          playsong(index,newlist);
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
+        },
+        leading: CircleAvatar(
+        radius: 25,
+        child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
+        title: Text(data.name,overflow:TextOverflow.ellipsis,),
+        subtitle: Text(data.count.toString()),
+        // Text(data.artist,overflow: TextOverflow.ellipsis,),
+        trailing: Wrap(
+          children: [
+            IconButton(onPressed: () {
+              
+            }, icon: const Icon(Icons.playlist_add)),
+            IconButton(onPressed: () {
+
+              showDialog(context: context, builder:(context) {
+                return AlertDialog(
+                  title: Text('Are you sure to delete'),
+                  actions: [
+                    
+                    TextButton(onPressed: () {
+                      deletefavouritelist(index);
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Deleted'),
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 1),));
+                      Navigator.of(context).pop();
+                    }, child: Text('Yes')),
+                    TextButton(onPressed: () {
+                      Navigator.of(context).pop();
+                    }, child: Text('No'))
+
+
+
+                ],);
+              },);
+            }, icon: const Icon(Icons.delete),)
+
+          ],
+        )
+      
+      ),
+    ),
+  );
 }

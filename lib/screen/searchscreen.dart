@@ -13,6 +13,7 @@ class Searchscreen extends StatefulWidget {
 class _SearchscreenState extends State<Searchscreen> {
 
   late List<Songsmodel> searchlist = allsongnotifierlist.value;
+
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
@@ -39,13 +40,15 @@ class _SearchscreenState extends State<Searchscreen> {
             ),
             Expanded(child: Padding(
               padding: const EdgeInsets.all(15),
-                child: ListView.separated(
+                child:searchlist.isNotEmpty ? ListView.separated(
                   itemBuilder: (context, index) {
                   final data = searchlist[index];
-                  return songbar(data, context);
+                  return songlistbar(data: data, context: context, index: index, songlist: searchlist);
+                  // songbar(data, context,index,searchlist);
                 }, 
                   separatorBuilder: (context, index) => SizedBox(height: 15,), 
-                  itemCount: searchlist.length),
+                  itemCount: searchlist.length):
+                  Center(child: headtext('No Songs'))
               )
             )
           ],
@@ -57,12 +60,6 @@ class _SearchscreenState extends State<Searchscreen> {
   search( String value){
     setState(() {
       searchlist = allsongnotifierlist.value.where((element) => element.name.toLowerCase().contains(value.toLowerCase())).toList();
-
-      // searchlist = allsongnotifierlist.value.forEach((element) {
-
-       
-
-      // } );
     });
     
   }

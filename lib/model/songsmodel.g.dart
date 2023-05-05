@@ -22,13 +22,14 @@ class SongsmodelAdapter extends TypeAdapter<Songsmodel> {
       uri: fields[2] as String,
       id: fields[3] as int,
       duration: fields[4] as int,
+      count: fields[5] as int,
     );
   }
 
   @override
   void write(BinaryWriter writer, Songsmodel obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class SongsmodelAdapter extends TypeAdapter<Songsmodel> {
       ..writeByte(3)
       ..write(obj.id)
       ..writeByte(4)
-      ..write(obj.duration);
+      ..write(obj.duration)
+      ..writeByte(5)
+      ..write(obj.count);
   }
 
   @override

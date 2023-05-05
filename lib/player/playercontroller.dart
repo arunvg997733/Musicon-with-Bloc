@@ -17,7 +17,7 @@ List<SongModel> mp3songslist =[];
 
 checkpermission()async{
   final permission = await Permission.storage.request();
-  Allsongdatabasetolist();
+  
   if(permission.isGranted){
     allsonglist = await audioquery.querySongs();
 
@@ -29,6 +29,9 @@ checkpermission()async{
     for(var element in mp3songslist){
       addallsongtodata(element);
     }
+    Allsongdatabasetolist();
+    
+    
   }else{
     checkpermission();
   }
@@ -36,12 +39,24 @@ checkpermission()async{
 
 
 
-playsong(uri){
+List <Audio> audio = []; 
 
-  List <Audio> audio = 
-  // audioPlayer.open(Audio.file(uri),showNotification: true);
-  audioPlayer.open(Playlist(audios:));
-  // audioPlayer.play();
 
-  audioPlayer.play();
+
+playsong(index,List songlist){
+
+  audio.clear();
+
+  for(var element in songlist){
+    audio.add(Audio.file(
+      element.uri,
+      metas: Metas(
+        id: element.id.toString(),
+        artist: element.artist,
+        title: element.name,
+        )
+      )
+    );
+  }
+  audioPlayer.open(Playlist(audios: audio,startIndex:index ),autoStart: false,showNotification: true);
 }

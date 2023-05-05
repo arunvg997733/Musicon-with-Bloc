@@ -13,9 +13,11 @@ class Songsmodel{
   int id;
   @HiveField(4)
   int duration;
+  @HiveField(5)
+  int count;
 
 
-  Songsmodel({required this.name,required this.artist,required this.uri,required this.id,required this.duration});
+  Songsmodel({required this.name,required this.artist,required this.uri,required this.id,required this.duration,this.count=0});
 
   
 }

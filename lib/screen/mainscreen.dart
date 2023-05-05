@@ -17,7 +17,7 @@ class Mainscreen extends StatefulWidget {
 
 class _MainscreenState extends State<Mainscreen> {
 
-  int currentindex=1;
+  int currentindex=0;
   final pages = const [
     Allsongscreen(),
     Homescreen(),

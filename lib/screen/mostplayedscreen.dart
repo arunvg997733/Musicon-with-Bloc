@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:musicon/List/songnotifierlist.dart';
+import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/model/songsmodel.dart';
 import 'package:musicon/widgets/widget.dart';
 
 class Mostplayedscreen extends StatelessWidget {
@@ -6,6 +9,7 @@ class Mostplayedscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    mostplayeddatabasetolist();
     return Scaffold(
       appBar: AppBar(
         title: headtext('Most Played'),
@@ -21,14 +25,26 @@ class Mostplayedscreen extends StatelessWidget {
         ],
       ),
       body:Container(
+        decoration:const BoxDecoration(
+            image: DecorationImage(image: AssetImage('assets/Background.png'),
+            fit: BoxFit.cover)
+          ),
         width: double.infinity,
-        color: Colors.black,
-        child: Column(
-        children: const [
-          
+        child: ValueListenableBuilder(
+          valueListenable: mostplayedlistnotifier, 
+          builder:(BuildContext ctx, List<Songsmodel> newlist, Widget?child){
+            return newlist.isNotEmpty? ListView.separated(
+              itemBuilder: (context, index) {
+                final data = newlist[index];
+                return songbar2(data, context, index,mostplayedlistnotifier.value);
+              }, 
+              separatorBuilder: (context, index) {
+                return SizedBox(height: 15,);
+              }, 
+              itemCount: newlist.length):Center(child: headtext('No Songs'));
 
-        ],
-      ))
+          } )
+      )
     );
   }
 }

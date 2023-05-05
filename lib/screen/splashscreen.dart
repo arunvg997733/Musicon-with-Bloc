@@ -18,6 +18,7 @@ class _SplashscreenState extends State<Splashscreen> {
     checkname(context);
     checkpermission();
    
+   
     
     
   }

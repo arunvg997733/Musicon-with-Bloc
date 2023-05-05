@@ -9,7 +9,7 @@ class Allsongscreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    //  Allsongdatabasetolist();
+    favouritedatabasetolist();
 
     return  Scaffold(
 
@@ -25,7 +25,8 @@ class Allsongscreen extends StatelessWidget {
                   return ListView.separated(
                   itemBuilder: (context, index) {
                     final data = newallsonglist[index];
-                    return songbar(data, context);
+                    return songlistbar(data: data, context: context, index: index, songlist: allsongnotifierlist.value);
+                    // songbar(data, context,index,allsongnotifierlist.value);
                   }, 
                   separatorBuilder: (context, index) => SizedBox(height: 15,), 
                   itemCount:newallsonglist.length );

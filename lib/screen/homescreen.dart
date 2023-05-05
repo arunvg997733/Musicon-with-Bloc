@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/screen/favouritescreen.dart';
 import 'package:musicon/screen/mostplayedscreen.dart';
+import 'package:musicon/screen/recentscreen.dart';
 import 'package:musicon/widgets/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +33,8 @@ class _HomescreenState extends State<Homescreen> {
 
   List playcardnavigation = const [
     Favouritescreen(),
-    Mostplayedscreen()
+    Mostplayedscreen(),
+    recentscreen()
   ];
 
   @override
@@ -70,6 +73,7 @@ class _HomescreenState extends State<Homescreen> {
                         borderRadius: BorderRadius.circular(20),
                         child: InkWell(
                           onTap: () {
+                              favouritedatabasetolist();
                              Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>playcardnavigation[index]));
                             },
                           child: playbox(playcard[index],currentindex,index))),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:musicon/List/songnotifierlist.dart';
+import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/model/songsmodel.dart';
 import 'package:musicon/screen/mainscreen.dart';
 import 'package:musicon/screen/namescreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -18,7 +21,7 @@ Future<void> setname(String name,context)async{
 
 }
 
-Future<void> namechecker()async{
+Future<void> setbool()async{
   final SharedPreferences check = await SharedPreferences.getInstance();
   check.setBool('checkbool', true);
 }
@@ -32,5 +35,28 @@ void checkname(context)async{
   }else{
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Namescreen()));
   }
+}
+
+bool favouritechecking(Songsmodel data){
+
+  for(var element in favoritelistnotifier.value){
+    if(data.id == element.id){
+      return true;
+    }
+  }
+  
+  return false;
+
+}
+
+findsong(int songid){
+  for(var element in allsongnotifierlist.value){
+    if(songid == element.id){
+      addtorecentdatabase(element);
+      addtomostplayeddatabase(element);
+      break;
+    }
+  }
+
 }
 

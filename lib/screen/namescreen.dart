@@ -34,7 +34,7 @@ class Namescreen extends StatelessWidget {
                   decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),filled: true,fillColor: Colors.grey),),
                 ElevatedButton(onPressed: (){
                   setname(namectr.text,context);
-                  namechecker();
+                  setbool();
                 }, 
                 style: ButtonStyle(
                   shape: MaterialStateProperty.all(
@@ -46,7 +46,7 @@ class Namescreen extends StatelessWidget {
                     child: const Text('Submit'),
                     ),
                 ElevatedButton(onPressed: (){
-                  namechecker();
+                  setbool();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Mainscreen()));
                 }, 
                   style: ButtonStyle(
