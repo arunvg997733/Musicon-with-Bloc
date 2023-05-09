@@ -52,7 +52,7 @@ class _MainscreenState extends State<Mainscreen> {
          
         actions: <Widget>[
           currentindex ==2?IconButton(onPressed: (){
-            playlistshowdialog(context);
+            playlistshowdialog(context,);
           }, icon: const Icon(Icons.add_circle_outline,color: Colors.white,)):
           IconButton(onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Searchscreen()));
