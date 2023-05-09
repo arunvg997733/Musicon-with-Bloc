@@ -10,7 +10,6 @@ class Allsongscreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     favouritedatabasetolist();
-
     return  Scaffold(
 
       body: Container(

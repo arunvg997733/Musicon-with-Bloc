@@ -30,6 +30,9 @@ checkpermission()async{
       addallsongtodata(element);
     }
     Allsongdatabasetolist();
+    favouritedatabasetolist();
+    recentdatabasetolist();
+    mostplayeddatabasetolist();
     
     
   }else{

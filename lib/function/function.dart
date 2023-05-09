@@ -60,3 +60,19 @@ findsong(int songid){
 
 }
 
+playlistshowdialog(context){
+  showDialog(context: context, builder: (ctx) {
+    return AlertDialog(
+      title:  Text('Create Play list'),
+      content: Column(
+        children: [
+          TextField(),
+          ElevatedButton(onPressed: () {
+            
+          }, child: Text('Submit'))
+        ],
+      ),
+    );
+  },);
+}
+

@@ -30,20 +30,23 @@ class Mostplayedscreen extends StatelessWidget {
             fit: BoxFit.cover)
           ),
         width: double.infinity,
-        child: ValueListenableBuilder(
-          valueListenable: mostplayedlistnotifier, 
-          builder:(BuildContext ctx, List<Songsmodel> newlist, Widget?child){
-            return newlist.isNotEmpty? ListView.separated(
-              itemBuilder: (context, index) {
-                final data = newlist[index];
-                return songbar2(data, context, index,mostplayedlistnotifier.value);
-              }, 
-              separatorBuilder: (context, index) {
-                return SizedBox(height: 15,);
-              }, 
-              itemCount: newlist.length):Center(child: headtext('No Songs'));
-
-          } )
+        child: Padding(
+          padding: const EdgeInsets.all(15.0),
+          child: ValueListenableBuilder(
+            valueListenable: mostplayedlistnotifier, 
+            builder:(BuildContext ctx, List<Songsmodel> newlist, Widget?child){
+              return newlist.isNotEmpty? ListView.separated(
+                itemBuilder: (context, index) {
+                  final data = newlist[index];
+                  return songbar3(data, context, index,mostplayedlistnotifier.value);
+                }, 
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 15,);
+                }, 
+                itemCount: newlist.length):Center(child: headtext('No Songs'));
+        
+            } ),
+        )
       )
     );
   }

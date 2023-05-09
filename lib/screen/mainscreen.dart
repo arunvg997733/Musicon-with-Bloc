@@ -1,6 +1,7 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/function/function.dart';
 import 'package:musicon/screen/allsongscreen.dart';
 import 'package:musicon/screen/homescreen.dart';
 import 'package:musicon/screen/playlistscreen.dart';
@@ -51,7 +52,7 @@ class _MainscreenState extends State<Mainscreen> {
          
         actions: <Widget>[
           currentindex ==2?IconButton(onPressed: (){
-
+            playlistshowdialog(context);
           }, icon: const Icon(Icons.add_circle_outline,color: Colors.white,)):
           IconButton(onPressed: (){
             Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Searchscreen()));

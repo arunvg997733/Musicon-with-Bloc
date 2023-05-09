@@ -28,10 +28,11 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
  
   @override
   Widget build(BuildContext context) {
+  bool isfavourate = favouritechecking(widget.data);
   bool isplaying = audioPlayer.isPlaying.value;
-  // int id = allsongnotifierlist.value[index].id;
      
     return  Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: headtext('Now Playing'),
         centerTitle: true,
@@ -61,9 +62,9 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(15.0),
+                padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 15),
                 child: Container(
-                  width: 250,
+                  width: double.infinity,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.grey),
                   child: Padding(
                     padding: const EdgeInsets.all(15.0),
@@ -102,8 +103,16 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
                                   audioPlayer.toggleShuffle();
                                 }, icon: const Icon(Icons.repeat)),
                                 IconButton(onPressed: () {
-                                  addtofavoritedatabase(widget.data, context);
-                                }, icon: const Icon(Icons.favorite))
+                                  setState(() {
+                                    if(isfavourate==false){
+                                      addtofavoritedatabase(widget.data, context);
+                                    }else{
+                                      deletefavouritelistontap(widget.data, context);
+                                    }
+                                    
+                                  });
+                                  
+                                }, icon:isfavourate==true?const Icon(Icons.favorite):Icon(Icons.favorite_border))
                               ],
                             ),
                             Row(

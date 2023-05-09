@@ -17,6 +17,7 @@ class _SplashscreenState extends State<Splashscreen> {
     super.initState();
     checkname(context);
     checkpermission();
+    
    
    
     

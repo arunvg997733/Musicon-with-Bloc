@@ -20,48 +20,48 @@ List templist = [];
 int number = 0;
 
 
-addtorecent(Songsmodel data){
+// addtorecent(Songsmodel data){
 
-  // int number = 0;
+//   // int number = 0;
 
-  bool flag = true;
+//   bool flag = true;
 
-  for(var element in recentlistnotifier.value){
+//   for(var element in recentlistnotifier.value){
 
-    if(data.id == element.id){
-      flag = false;
-    }
+//     if(data.id == element.id){
+//       flag = false;
+//     }
 
 
 
-  }
+//   }
 
-  if(flag == true){
+//   if(flag == true){
 
-    //   templist.add(data);
+//     //   templist.add(data);
     
-    // recentlistnotifier.value.clear();
+//     // recentlistnotifier.value.clear();
 
-    // for(int i=templist.length-1;i>=0;i--){
-    //   recentlistnotifier.value.add(templist[i]);
-    // }
+//     // for(int i=templist.length-1;i>=0;i--){
+//     //   recentlistnotifier.value.add(templist[i]);
+//     // }
 
-    recentlistnotifier.value.add(data);
-    int n=recentlistnotifier.value.length;
+//     recentlistnotifier.value.add(data);
+//     int n=recentlistnotifier.value.length;
 
-    for(int i=0;i<n;i++){
-      Songsmodel temp = recentlistnotifier.value[i];
+//     for(int i=0;i<n;i++){
+//       Songsmodel temp = recentlistnotifier.value[i];
       
 
-    }
+//     }
 
     
 
    
 
-  }
+//   }
 
 
 
-}
+// }
 

@@ -36,7 +36,7 @@ class recentscreen extends StatelessWidget {
               return !recentlistnotifier.value.isEmpty?ListView.separated(
                 itemBuilder: (context, index) {
                   final data = recentlist[index];
-                  return songbar2(data, context, index,recentlistnotifier.value);
+                  return songbar3(data, context, index,recentlistnotifier.value);
                 }, 
                 separatorBuilder: (context, index) {
                   return SizedBox( height: 15,);

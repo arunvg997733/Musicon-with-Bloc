@@ -87,7 +87,7 @@ deletefavouritelist(int index)async{
 
 }
 
-deletefavouritelistontap(Songsmodel data)async{
+deletefavouritelistontap(Songsmodel data,context)async{
   final favouriteDB = await Hive.box<Songsmodel>('favoriteDB');
   int index=0;
   for(var element in favouriteDB.values){
@@ -99,6 +99,12 @@ deletefavouritelistontap(Songsmodel data)async{
   }
 
   favouriteDB.deleteAt(index);
+  ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Deleted from Favourite list'),
+                          behavior: SnackBarBehavior.floating,
+                          duration: Duration(seconds: 1),)
+                          );
   favouritedatabasetolist();
 }
 

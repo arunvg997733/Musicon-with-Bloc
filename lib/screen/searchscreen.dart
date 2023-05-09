@@ -17,6 +17,7 @@ class _SearchscreenState extends State<Searchscreen> {
   @override
   Widget build(BuildContext context) {
     return  Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: headtext('Search'),
         centerTitle: true,

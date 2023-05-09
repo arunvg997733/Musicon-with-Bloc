@@ -54,7 +54,7 @@ class _songlistbarState extends State<songlistbar> {
                   addtofavoritedatabase(widget.data,context);
                   
                 }else{
-                  deletefavouritelistontap(widget.data);
+                  deletefavouritelistontap(widget.data,widget.context);
                   
                 }
                 
@@ -72,42 +72,42 @@ class _songlistbarState extends State<songlistbar> {
   }
 }
 
-Widget songbar( Songsmodel data,context,int index,List songlist){
+// Widget songbar( Songsmodel data,context,int index,List songlist){
 
-  // isfavouritecheck.value = favouritechecking(data);
-  bool isfavouritecheck = favouritechecking(data);
+//   // isfavouritecheck.value = favouritechecking(data);
+//   bool isfavouritecheck = favouritechecking(data);
 
-  return ClipRRect(
-    borderRadius: BorderRadius.circular(50),
-    child: Container(
-      color: const Color.fromARGB(204, 158, 158, 158),
-      child:  ListTile(
-        onTap: () {
-          playsong(index,songlist);
-          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
-        },
-        leading: CircleAvatar(
-        radius: 25,
-        child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
-        title: Text(data.name,overflow:TextOverflow.ellipsis,),
-        subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
-        trailing: Wrap(
-          children: [
-            IconButton(onPressed: () {
+//   return ClipRRect(
+//     borderRadius: BorderRadius.circular(50),
+//     child: Container(
+//       color: const Color.fromARGB(204, 158, 158, 158),
+//       child:  ListTile(
+//         onTap: () {
+//           playsong(index,songlist);
+//           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
+//         },
+//         leading: CircleAvatar(
+//         radius: 25,
+//         child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
+//         title: Text(data.name,overflow:TextOverflow.ellipsis,),
+//         subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
+//         trailing: Wrap(
+//           children: [
+//             IconButton(onPressed: () {
 
-            }, icon: const Icon(Icons.playlist_add)),
-            IconButton(onPressed: () {
-              addtofavoritedatabase(data,context);
+//             }, icon: const Icon(Icons.playlist_add)),
+//             IconButton(onPressed: () {
+//               addtofavoritedatabase(data,context);
               
-            }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
+//             }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
 
-          ],
-        )
+//           ],
+//         )
       
-      ),
-    ),
-  );
-}
+//       ),
+//     ),
+//   );
+// }
 
 Widget topbar(String text){
   return Padding(
@@ -168,8 +168,7 @@ Widget songbar2( Songsmodel data,context,int index,List newlist){
         radius: 25,
         child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
         title: Text(data.name,overflow:TextOverflow.ellipsis,),
-        subtitle: Text(data.count.toString()),
-        // Text(data.artist,overflow: TextOverflow.ellipsis,),
+        subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
         trailing: Wrap(
           children: [
             IconButton(onPressed: () {
@@ -188,7 +187,8 @@ Widget songbar2( Songsmodel data,context,int index,List newlist){
                         SnackBar(
                           content: Text('Deleted'),
                           behavior: SnackBarBehavior.floating,
-                          duration: Duration(seconds: 1),));
+                          duration: Duration(seconds: 1),)
+                          );
                       Navigator.of(context).pop();
                     }, child: Text('Yes')),
                     TextButton(onPressed: () {
@@ -208,3 +208,34 @@ Widget songbar2( Songsmodel data,context,int index,List newlist){
     ),
   );
 }
+
+
+Widget songbar3( Songsmodel data,context,int index,List newlist){
+  return ClipRRect(
+    borderRadius: BorderRadius.circular(50),
+    child: Container(
+      color: const Color.fromARGB(204, 158, 158, 158),
+      child:  ListTile(
+        onTap: () {
+          playsong(index,newlist);
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
+        },
+        leading: CircleAvatar(
+        radius: 25,
+        child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
+        title: Text(data.name,overflow:TextOverflow.ellipsis,),
+        subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
+        trailing: Wrap(
+          children: [
+            IconButton(onPressed: () {
+              
+            }, icon: const Icon(Icons.playlist_add)),
+            // Text(data.count.toString())
+          ],
+        )
+      
+      ),
+    ),
+  );
+}
+
