@@ -20,10 +20,7 @@ class Nowplayingscreen extends StatefulWidget {
 
 class _NowplayingscreenState extends State<Nowplayingscreen> {
 
-  
-  
-    //  int index = audioPlayer.current.value!.index;
-      
+  bool play = false;
 
  
   @override
@@ -46,12 +43,6 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
         int songid  = int.parse(playing.audio.audio.metas.id!);
         findsong(songid);
 
-        
-
-
-
-
-        
         return Container(
         decoration:const BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/Background.png'),
@@ -93,7 +84,7 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
                             Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 IconButton(onPressed: () {
-                                  
+                                  playlistbottomsheet(context, widget.data);
                                 }, icon: const Icon(Icons.playlist_add)),
                                 IconButton(onPressed: () {
                                   
@@ -133,10 +124,18 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
                                   child: IconButton(onPressed: () {
                                      
                                     setState(() {
-                                      audioPlayer.playOrPause();
+
+                                      if(play==false){
+                                        audioPlayer.play();
+                                        play =true;
+                                      }else{
+                                        audioPlayer.pause();
+                                        play = false;
+                                      }
+                                      // audioPlayer.playOrPause();
                                     });
                                     
-                                    }, icon:isplaying!=true? const Icon(Icons.play_arrow):const Icon(Icons.pause)),
+                                    }, icon:play==false? const Icon(Icons.play_arrow):const Icon(Icons.pause)),
                                 ),
                               ),
                               IconButton(onPressed: () {

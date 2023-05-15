@@ -36,6 +36,7 @@ class Mostplayedscreen extends StatelessWidget {
             valueListenable: mostplayedlistnotifier, 
             builder:(BuildContext ctx, List<Songsmodel> newlist, Widget?child){
               return newlist.isNotEmpty? ListView.separated(
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = newlist[index];
                   return songbar3(data, context, index,mostplayedlistnotifier.value);

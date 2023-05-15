@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
 import 'package:musicon/screen/mainscreen.dart';
 import 'package:musicon/screen/namescreen.dart';
+import 'package:musicon/screen/playlistscreen.dart';
 import 'package:musicon/widgets/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -18,7 +18,7 @@ Future<void> setname(String name,context)async{
   }else{
     final SharedPreferences savename = await SharedPreferences.getInstance();
   savename.setString('name', name);
-  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>Mainscreen()),(route) => false,);
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>const Mainscreen()),(route) => false,);
   }
   
 
@@ -34,7 +34,7 @@ void checkname(context)async{
   final SharedPreferences check = await SharedPreferences.getInstance();
   final checkvalue = check.getBool('checkbool');
   if(checkvalue==true){
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Mainscreen()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Mainscreen()));
   }else{
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Namescreen()));
   }
@@ -67,7 +67,7 @@ playlistshowdialog(context){
   showDialog(context: context, builder: (ctx) {
     final playlistnamectr = TextEditingController();
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20))),
       backgroundColor: const Color.fromARGB(255, 63, 63, 63),
       actionsAlignment: MainAxisAlignment.spaceAround,
       title:  Center(child: headtext('Create Play list')),
@@ -78,22 +78,95 @@ playlistshowdialog(context){
         
         TextButton(onPressed: () {
           List<Songsmodel> newplaylist =[];
-          // addtoplaylist(playlistnamectr.text, newplaylist);
+          if(playlistnamectr.text.isEmpty){
+            ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text('Please Enter Valid Name'),behavior: SnackBarBehavior.floating,));
+          }else{
+            addplaylisttodatabase(playlistnamectr.text, newplaylist,context);
+            Navigator.pop(context);
+          }
           
-          Navigator.pop(context);
-        }, child: Text('Create')),
+          
+        }, child: const Text('Create')),
         TextButton(onPressed: () {
           Navigator.pop(context);
-        }, child: Text('Cancel'))
+        }, child: const Text('Cancel'))
       ],
     );
   },);
 }
 
+playlistbottomsheet(context,Songsmodel songdata){
+  showModalBottomSheet(
+    backgroundColor: Colors.transparent,
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(50))),
+    context: context, 
+    builder: (context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
+        color: Color.fromARGB(216, 0, 0, 0)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: Column(
+          children: [
+            headtext('Playlist'),
+            IconButton(onPressed: () {
+              playlistshowdialog(context);
+            }, icon: Icon(Icons.add_box_outlined,color: Colors.white,)),
+      
+            Expanded(child: ValueListenableBuilder(valueListenable: playlistnotifier, builder:(BuildContext ctx, List<Playlistmodel> newlist, Widget? child){
+                return ListView.separated(
+                  itemBuilder: (context, index) {
+                    final data = newlist[index];
+                    return playlistbar(data,context,songdata);
+                  }, 
+                  separatorBuilder: (context, index) {
+                    return SizedBox(height: 15,);
+                  }, 
+                  itemCount: newlist.length);
+              }),
+              )
+          ],
+        ),
+      ),
+    );
+  },
+  );
+}
 
-// addtoplaylist(String name,List<Songsmodel> newlist){
-// final newplaylist = Playlistmodel(playlistname: name, playlistarray: newlist);
-// playlistnotifier.value.add(newplaylist);
-// playlistnotifier.notifyListeners();
-// }
+allsongbottomsheet(context,String listname){
+  showModalBottomSheet(
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.vertical(top: Radius.circular(50))),
+    backgroundColor: Colors.transparent,
+    context: context, 
+    builder: (context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(50)),
+        color: Color.fromARGB(148, 0, 0, 0)
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(15),
+        child: Column(
+          children: [
+            headtext('All Songs'),
+            Expanded(
+              child: ListView.separated(
+                itemBuilder: (context, index) {
+                  final data = allsongnotifierlist.value[index];
+                  return songbar5(data, context, index,listname);
+                }, 
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 15,);
+                }, 
+                itemCount: allsongnotifierlist.value.length),
+            ),
+          ],
+        ),
+      ),
+    );
+  },);
+}
+
 

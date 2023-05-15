@@ -33,6 +33,7 @@ checkpermission()async{
     favouritedatabasetolist();
     recentdatabasetolist();
     mostplayeddatabasetolist();
+    playlistdatabasetolist();
     
     
   }else{

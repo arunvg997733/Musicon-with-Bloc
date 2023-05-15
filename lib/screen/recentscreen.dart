@@ -34,6 +34,7 @@ class recentscreen extends StatelessWidget {
             valueListenable: recentlistnotifier, 
             builder: (BuildContext ctx, List<Songsmodel> recentlist, Widget? child){
               return !recentlistnotifier.value.isEmpty?ListView.separated(
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = recentlist[index];
                   return songbar3(data, context, index,recentlistnotifier.value);

@@ -35,7 +35,8 @@ class Favouritescreen extends StatelessWidget {
           padding: const EdgeInsets.all(15.0),
           child: ValueListenableBuilder(
             valueListenable: favoritelistnotifier, builder:(BuildContext ctx, List<Songsmodel> favouritelist, Widget? child){
-              return !favoritelistnotifier.value.isEmpty?ListView.separated(
+              return favouritelist.isNotEmpty?ListView.separated(
+                physics: BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = favouritelist[index];
                   return songbar2(data,context,index,favoritelistnotifier.value);

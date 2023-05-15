@@ -22,7 +22,8 @@ class Allsongscreen extends StatelessWidget {
                 valueListenable: allsongnotifierlist,
                 builder: (BuildContext ctx, List<Songsmodel> newallsonglist, Widget? child) {
                   return ListView.separated(
-                  itemBuilder: (context, index) {
+                  physics: BouncingScrollPhysics(),
+                  itemBuilder: (contex, index) {
                     final data = newallsonglist[index];
                     return songlistbar(data: data, context: context, index: index, songlist: allsongnotifierlist.value);
                     // songbar(data, context,index,allsongnotifierlist.value);

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musicon/List/songnotifierlist.dart';
+import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -151,7 +152,7 @@ recentdatabasetolist()async{
 
 addtomostplayeddatabase(Songsmodel data)async{
   final mostplayedDB =  await Hive.openBox<Songsmodel>('mostplayedDB');
-  data.count = data.count+1;
+  int mostpayedcount = 0;
 
   int count=0;
 
@@ -167,12 +168,13 @@ addtomostplayeddatabase(Songsmodel data)async{
 
   for(var element in mostplayedDB.values){
     if(data.id == element.id){
+      mostpayedcount = element.count+1;
       mostplayedDB.deleteAt(index);
     }
     index++;
   }
 
-  final newsong = Songsmodel(name: data.name, artist: data.artist, uri: data.uri, id: data.id, duration: data.duration,count: data.count);
+  final newsong = Songsmodel(name: data.name, artist: data.artist, uri: data.uri, id: data.id, duration: data.duration,count: mostpayedcount);
   mostplayedDB.add(newsong);
   mostplayeddatabasetolist();
 }
@@ -196,6 +198,114 @@ mostplayeddatabasetolist()async{
   }
   mostplayedlistnotifier.notifyListeners();
 }
+
+
+//PLAYLIST DATABASE//
+
+addplaylisttodatabase(String listname,List<Songsmodel> listarray,context)async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  bool flag =true;
+  for(var element in playlistDB.values){
+    if(listname == element.playlistname){
+      flag = false;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,));
+    }
+  }
+
+  if(flag==true){
+  final newplaylsit = Playlistmodel(playlistname: listname, playlistarray: listarray);
+  playlistDB.add(newplaylsit);
+  playlistdatabasetolist();
+  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Playlist Created'),behavior: SnackBarBehavior.floating,));
+
+  }
+  
+}
+
+playlistdatabasetolist()async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  playlistnotifier.value.clear();
+  playlistnotifier.value.addAll(playlistDB.values);
+  playlistnotifier.notifyListeners();
+}
+
+deleteplaylistdatabase(Playlistmodel data)async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  int index =0;
+  for(var element in playlistDB.values){
+    if(data.playlistname == element.playlistname){
+      playlistDB.deleteAt(index); 
+      break;
+    }
+    index++;
+  }
+  playlistdatabasetolist();
+}
+
+//SONGS FROM PLAYLIST DATABASE//
+
+songaddtoplaylistdatabase(String listname,Songsmodel songdata,context)async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  int index = 0;
+  List <Songsmodel> newplayarray = [];
+  bool flag = true;
+  for(var element in playlistDB.values){
+    if(listname == element.playlistname){
+      newplayarray  = element.playlistarray;
+      for(var element in newplayarray){
+        if(songdata.id == element.id){
+          flag = false;
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1)));
+          return;
+        }
+      }
+      if(flag == true){
+      newplayarray.add(songdata);
+      final newplaylist = Playlistmodel(playlistname: listname, playlistarray: newplayarray);
+      playlistDB.putAt(index, newplaylist);
+      newplaylistnotifier.notifyListeners();
+      playlistnotifier.notifyListeners();
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added to Playlist'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1),));
+
+      }
+      
+      
+
+      
+    }
+    index++;
+  }
+}
+
+songsdeletefromplaylist(Songsmodel data,String name)async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  int index =0;
+  List <Songsmodel> newlist;
+  for(var element in playlistDB.values){
+    if(name == element.playlistname){
+      
+      for(var elements in element.playlistarray){
+        if(data.id == elements.id){
+          element.playlistarray.remove(elements);
+          newlist = element.playlistarray;
+          final newplaylist = Playlistmodel(playlistname: name, playlistarray: newlist);
+          playlistDB.putAt(index,newplaylist);
+          newplaylistnotifier.notifyListeners();
+          playlistnotifier.notifyListeners();
+          break;
+
+        }
+      }
+    }
+    index++;
+  }
+  
+
+
+}
+
+
+
 
 
 

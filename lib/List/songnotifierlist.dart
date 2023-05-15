@@ -1,9 +1,6 @@
-import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
-import 'package:musicon/player/playercontroller.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 
 
@@ -11,7 +8,7 @@ ValueNotifier<List<Songsmodel>> allsongnotifierlist = ValueNotifier([]);
 
 ValueNotifier<List<Songsmodel>> favoritelistnotifier = ValueNotifier([]);
 
-ValueNotifier<bool> isfavouritecheck = ValueNotifier(true); 
+// ValueNotifier<bool> isfavouritecheck = ValueNotifier(true); 
 
 ValueNotifier<List<Songsmodel>> recentlistnotifier = ValueNotifier([]);
 
@@ -19,7 +16,11 @@ ValueNotifier<List<Songsmodel>> mostplayedlistnotifier = ValueNotifier([]);
 
 ValueNotifier<List<Playlistmodel>> playlistnotifier = ValueNotifier([]);
 
+ValueNotifier<List<Songsmodel>> newplaylistnotifier = ValueNotifier([]);
+
 List templist = [];
+
+
 
 int number = 0;
 
