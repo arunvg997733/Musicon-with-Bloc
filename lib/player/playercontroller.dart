@@ -1,7 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
-import 'package:musicon/model/songsmodel.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -12,6 +10,10 @@ final audioPlayer = AssetsAudioPlayer();
 
 List<SongModel> allsonglist = [];
 List<SongModel> mp3songslist =[];
+
+
+
+
 
 
 
@@ -62,5 +64,13 @@ playsong(index,List songlist){
       )
     );
   }
-  audioPlayer.open(Playlist(audios: audio,startIndex:index ),autoStart: false,showNotification: true);
+  audioPlayer.open(Playlist(audios: audio,startIndex:index ),
+  autoStart: true,
+  showNotification: true,
+  loopMode: LoopMode.playlist,
+  notificationSettings: const NotificationSettings(
+    stopEnabled: false,
+    seekBarEnabled: true,
+    )
+  );
 }

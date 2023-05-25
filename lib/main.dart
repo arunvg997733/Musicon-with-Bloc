@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
@@ -12,6 +13,10 @@ void main() {
   if(!Hive.isAdapterRegistered(PlaylistmodelAdapter().typeId)){
     Hive.registerAdapter(PlaylistmodelAdapter());
   }
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown
+  ]);
 
   runApp(const MyApp());
   

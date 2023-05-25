@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/function/function.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/screen/newplaylistscreen.dart';
 import 'package:musicon/widgets/widget.dart';
-import 'package:on_audio_query/on_audio_query.dart';
 
 class Playlistscreen extends StatelessWidget {
   const Playlistscreen({super.key});
@@ -14,6 +13,7 @@ class Playlistscreen extends StatelessWidget {
   Widget build(BuildContext context) {
     playlistdatabasetolist();
     return  Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         bottom: false,
         child: Container(
@@ -44,28 +44,31 @@ class Playlistscreen extends StatelessWidget {
                   backgroundImage: AssetImage('assets/musiconlogo.png')
                   ),
                   title: Text(data.playlistname),
-                  subtitle: data.playlistarray.length!=0 ? Text('${data.playlistarray.length.toString()} Songs'):Text('Empty'),
+                  subtitle: data.playlistarray.isNotEmpty ? Text('${data.playlistarray.length.toString()} Songs'):const Text('Empty'),
                   trailing: Wrap(
                   children: [
                     IconButton(onPressed: () {
+                      playlistshowdialogupdate(context,data,index);
+                    }, icon: const Icon(Icons.edit)),
+                    
+                    IconButton(onPressed: () {
                       showDialog(context: context, builder: (context) {
                         return AlertDialog(
-                          title: Text('Do you want to delete'),
+                          title: const Text('Do you want to delete'),
                           actions: [
                             TextButton(onPressed: () {
                               deleteplaylistdatabase(data);
                               Navigator.pop(context);
-                            }, child: Text('Yes')),
+                            }, child: const Text('Yes')),
                             TextButton(onPressed: () {
                               Navigator.pop(context);
-                            }, child: Text('No'))
+                            }, child: const Text('No'))
 
                           ],
                         );
                       },);
                       
-                    }, icon: Icon(Icons.delete))
-              
+                    }, icon: const Icon(Icons.delete)),
                   ],
         )
                 
@@ -73,34 +76,9 @@ class Playlistscreen extends StatelessWidget {
     ),
   );
                   
-                  
-            //       ClipRRect(
-            //   borderRadius: BorderRadius.circular(50),
-            //   child: Container(
-            //     color: const Color.fromARGB(204, 158, 158, 158),
-            //     child:  ListTile(
-            //       onTap: () {
-            
-            //       },
-            //       leading: const CircleAvatar(
-            //       radius: 25,
-            //       backgroundImage: AssetImage('assets/musiconlogo.png')
-            //       ),
-            //       title: Text(data.playlistname),
-            //       subtitle: Text('10'),
-            //       trailing: Wrap(
-            // children: const[
-              
-            // ],
-            //       )
-                
-            //     ),
-            //   ),
-            // );
-          
                 }, 
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: 15,);
+                  return const SizedBox(height: 15,);
                 }, 
                 itemCount: newlist.length): Center(child: headtext('No Playlist'));
             }),

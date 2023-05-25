@@ -1,22 +1,21 @@
+import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:get/route_manager.dart';
-import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/function/function.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
 import 'package:musicon/player/playercontroller.dart';
-import 'package:musicon/screen/newplaylistscreen.dart';
 import 'package:musicon/screen/nowplayingscreen.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:text_scroll/text_scroll.dart';
 
 Widget headtext(String text){
 return Text(text,style: const TextStyle(fontSize: 25,color: Colors.white,fontWeight: FontWeight.bold),);
 }
 
 
-class songlistbar extends StatefulWidget {
-   songlistbar({super.key,required this.data,required this.context,required this.index,required this.songlist});
+class Songlistbar extends StatefulWidget {
+   Songlistbar({super.key,required this.data,required this.context,required this.index,required this.songlist});
 
   Songsmodel data;
   BuildContext context;
@@ -24,10 +23,10 @@ class songlistbar extends StatefulWidget {
   List songlist;
 
   @override
-  State<songlistbar> createState() => _songlistbarState();
+  State<Songlistbar> createState() => SonglistbarState();
 }
 
-class _songlistbarState extends State<songlistbar> {
+class SonglistbarState extends State<Songlistbar> {
   @override
   Widget build(BuildContext context) {
     bool isfavouritecheck = favouritechecking(widget.data);
@@ -64,7 +63,7 @@ class _songlistbarState extends State<songlistbar> {
               });
               
               
-            }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
+            }, icon:isfavouritecheck==true ? const Icon(Icons.favorite,color: Color.fromARGB(255, 185, 25, 14),):const Icon(Icons.favorite_border_outlined,),)
 
           ],
         )
@@ -75,42 +74,7 @@ class _songlistbarState extends State<songlistbar> {
   }
 }
 
-// Widget songbar( Songsmodel data,context,int index,List songlist){
 
-//   // isfavouritecheck.value = favouritechecking(data);
-//   bool isfavouritecheck = favouritechecking(data);
-
-//   return ClipRRect(
-//     borderRadius: BorderRadius.circular(50),
-//     child: Container(
-//       color: const Color.fromARGB(204, 158, 158, 158),
-//       child:  ListTile(
-//         onTap: () {
-//           playsong(index,songlist);
-//           Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
-//         },
-//         leading: CircleAvatar(
-//         radius: 25,
-//         child: QueryArtworkWidget(id:data.id, type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35,),)),
-//         title: Text(data.name,overflow:TextOverflow.ellipsis,),
-//         subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
-//         trailing: Wrap(
-//           children: [
-//             IconButton(onPressed: () {
-
-//             }, icon: const Icon(Icons.playlist_add)),
-//             IconButton(onPressed: () {
-//               addtofavoritedatabase(data,context);
-              
-//             }, icon:isfavouritecheck==true ? const Icon(Icons.favorite):Icon(Icons.favorite_border_outlined),)
-
-//           ],
-//         )
-      
-//       ),
-//     ),
-//   );
-// }
 
 Widget topbar(String text){
   return Padding(
@@ -145,7 +109,7 @@ Widget playbox(String text,int curretidx,int value){
   );
 }
 
-Widget settingstext(String text,IconData icon){
+Widget settingstext(String text,IconData icon,context,int index){
   return Row(
     children: [
       const SizedBox(width: 5,),
@@ -181,22 +145,22 @@ Widget songbar2( Songsmodel data,context,int index,List newlist){
 
               showDialog(context: context, builder:(context) {
                 return AlertDialog(
-                  title: Text('Are you sure to delete'),
+                  title: const Text('Are you sure to delete'),
                   actions: [
                     
                     TextButton(onPressed: () {
                       deletefavouritelist(index);
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Deleted'),
                           behavior: SnackBarBehavior.floating,
                           duration: Duration(seconds: 1),)
                           );
                       Navigator.of(context).pop();
-                    }, child: Text('Yes')),
+                    }, child: const Text('Yes')),
                     TextButton(onPressed: () {
                       Navigator.of(context).pop();
-                    }, child: Text('No'))
+                    }, child: const Text('No'))
 
 
 
@@ -229,10 +193,10 @@ Widget songbar3( Songsmodel data,context,int index,List newlist){
         title: Text(data.name,overflow:TextOverflow.ellipsis,),
         subtitle: Text(data.artist,overflow: TextOverflow.ellipsis,),
         trailing: Wrap(
-          children: [
+          children: const [
             // IconButton(onPressed: () {
             // }, icon: const Icon(Icons.playlist_add)),
-            Text(data.count.toString())
+            // Text(data.count.toString())
           ],
         )
       
@@ -257,7 +221,7 @@ Widget playlistbar(Playlistmodel data,context,Songsmodel songdata){
                   backgroundImage: AssetImage('assets/musiconlogo.png')
                   ),
                   title: Text(data.playlistname),
-                  subtitle: data.playlistarray.length!=0 ? Text('${data.playlistarray.length.toString()} Songs'):Text('Empty'),
+                  subtitle: data.playlistarray.length!=0 ? Text('${data.playlistarray.length.toString()} Songs'):const Text('Empty'),
                   trailing: Wrap(
             children: const[
               
@@ -289,16 +253,16 @@ Widget songbar4( Songsmodel data,context,int index,Playlistmodel listdata){
             IconButton(onPressed: () {
               showDialog(context: context, builder: (context) {
                 return AlertDialog(
-                  title:  Text('Do you want to delete'),
+                  title:  const Text('Do you want to delete'),
                   actions: [
                     TextButton(onPressed: () {
                       songsdeletefromplaylist(data, listdata.playlistname);
-                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Song deleted from playlist'),duration: Duration(seconds: 1),));
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Song deleted from playlist'),duration: Duration(seconds: 1),));
                       Navigator.pop(context);
-                    }, child: Text('Yes')),
+                    }, child: const Text('Yes')),
                     TextButton(onPressed: () {
                       Navigator.pop(context);
-                    }, child: Text('No'))
+                    }, child: const Text('No'))
 
                 ],);
               },);
@@ -330,7 +294,7 @@ Widget songbar5( Songsmodel data,context,int index,String listname){
           children: [
             IconButton(onPressed: () {
               songaddtoplaylistdatabase(listname, data, context);
-            }, icon: Icon(Icons.add))
+            }, icon: const Icon(Icons.add))
             
           ],
         )
@@ -339,6 +303,276 @@ Widget songbar5( Songsmodel data,context,int index,String listname){
     ),
   );
 }
+
+class Minimusicplayer extends StatelessWidget {
+  const Minimusicplayer({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return audioPlayer.builderCurrent(builder: (context, playing) {
+      int songid  = int.parse(playing.audio.audio.metas.id!);
+      findsong(songid);
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
+      child: InkWell(
+        onTap: () {
+          final data = findsongwithid(int.parse(playing.audio.audio.metas.id.toString()));
+          Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=> Nowplayingscreen(data:data)));
+        },
+        child: Card(
+          color: const Color.fromARGB(255, 220, 121, 0),
+          child: Container(
+            height: 80,
+            
+            child: Row(children: [
+              Expanded(
+                
+                child: CircleAvatar(
+                  radius: 25,
+                  child: QueryArtworkWidget(id: int.parse(playing.audio.audio.metas.id.toString()), type: ArtworkType.AUDIO,nullArtworkWidget: Image.asset('assets/musiconlogo.png',height: 35
+                  ,),),
+                ),
+              ),
+              Expanded(
+                flex: 3,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    TextScroll(playing.audio.audio.metas.title.toString(),),
+                    
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        IconButton(onPressed: () {
+                          audioPlayer.previous();
+                        }, icon: const Icon(Icons.skip_previous)),
+                        PlayerBuilder.isPlaying(player: audioPlayer, builder: (context, isPlaying) {
+                          return IconButton(onPressed: () {
+                         
+                            if(isPlaying == false){
+                            audioPlayer.play();
+                          }else{
+                            audioPlayer.pause();
+                          }
+                  
+                        }, icon: isPlaying ==true ? const Icon(Icons.pause):const Icon(Icons.play_arrow));
+                        },),
+                        IconButton(onPressed: () {
+                          audioPlayer.next();
+                        }, icon: const Icon(Icons.skip_next)),
+                        IconButton(onPressed: () {
+                          audioPlayer.stop();
+                        }, icon: const Icon(Icons.stop))
+                      ],
+                    )
+              
+                  ],
+                ),
+              )
+            ],),
+          ),
+        ),
+      ),
+    );
+  },);
+  }
+}
+
+class Musicslider extends StatefulWidget {
+  const Musicslider({super.key});
+
+  @override
+  State<Musicslider> createState() => _MusicsliderState();
+}
+
+class _MusicsliderState extends State<Musicslider> {
+  double slidervalue =0;
+  double duration =0;
+  String totalmm = '';
+  String totalss = '';
+  String currentmm = '';
+  String currentss = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    audioPlayer.currentPosition.listen((event) { 
+      final currentduration = event;
+      currentmm = (currentduration.inMinutes %60).toString().padLeft(2,'0');
+      currentss = (currentduration.inSeconds %60).toString().padLeft(2,'0');
+
+      setState(() {
+        slidervalue = event.inSeconds.toDouble();
+      });
+    });
+
+  }
+  @override
+  Widget build(BuildContext context) {
+
+    
+    audioPlayer.current.listen((event) {
+      final totalduration = event!.audio.duration;
+      totalmm = (totalduration.inMinutes %60).toString().padLeft(2,'0');
+      totalss = (totalduration.inSeconds %60).toString().padLeft(2,'0');
+      duration = event.audio.duration.inSeconds.toDouble();
+
+    });
+    return Column(
+      children: [
+        Slider(value: slidervalue, min: 0.0,max: duration, onChanged: (value) {
+          setState(() {
+            slidervalue = value;
+            audioPlayer.seek(Duration(seconds: slidervalue.toInt()));
+          });
+        },),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal:20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text( '$currentmm:$currentss'),
+              Text( '$totalmm:$totalss')
+
+            // PlayerBuilder.currentPosition(player: audioPlayer, builder: (context, position) {
+            //   final mm = (position.inMinutes %60).toString().padLeft(2,'0');
+            //   final ss = (position.inSeconds %60).toString().padLeft(2,'0');
+            //   return Text('${mm}:${ss}');
+            // },),
+            // PlayerBuilder.current(player: audioPlayer, builder: (context, playing) {
+            //   final totalduration = playing.audio.duration;
+            //   final mm = (totalduration.inMinutes %60).toString().padLeft(2,'0');
+            //   final ss = (totalduration.inSeconds %60).toString().padLeft(2,'0');
+            //   return Text('${mm}:${ss}');
+            // },)
+          ],),
+        )
+      ],
+    );
+  }
+}
+
+class Musicsliders extends StatefulWidget {
+   Musicsliders({super.key});
+
+  @override
+  State<Musicsliders> createState() => _MusicslidersState();
+}
+
+class _MusicslidersState extends State<Musicsliders> {
+  double slidervalue =0;
+
+  double duration =0;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     audioPlayer.current.listen((event) {
+      final totalduration = event!.audio.duration;
+      duration = event.audio.duration.inSeconds.toDouble();
+
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    
+    return PlayerBuilder.currentPosition(player: audioPlayer, builder: (context, position) {
+
+    slidervalue = position.inSeconds.toDouble();
+
+    return Column(
+      children: [
+        Slider(value: slidervalue, min: 0.0,max: duration, onChanged: (value) {
+          
+            slidervalue = value;
+            audioPlayer.seek(Duration(seconds: slidervalue.toInt()));
+         
+        },),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal:20.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+
+              PlayerBuilder.currentPosition(player: audioPlayer, builder: (context, position) {
+              final mm = (position.inMinutes %60).toString().padLeft(2,'0');
+              final ss = (position.inSeconds %60).toString().padLeft(2,'0');
+              return Text('$mm:$ss');
+            },),
+            PlayerBuilder.current(player: audioPlayer, builder: (context, playing) {
+              final totalduration = playing.audio.duration;
+              final mm = (totalduration.inMinutes %60).toString().padLeft(2,'0');
+              final ss = (totalduration.inSeconds %60).toString().padLeft(2,'0');
+              return Text('$mm:$ss');
+            },)
+              
+
+           
+          ],),
+        )
+      ],
+    );
+  },);
+  }
+}
+
+Widget musicslider(){
+
+  double slidervalue =0;
+  double duration =0;
+
+  audioPlayer.current.listen((event) {
+      duration = event!.audio.duration.inSeconds.toDouble();
+    });
+    
+
+  return PlayerBuilder.currentPosition(player: audioPlayer, builder: (context, position) {
+
+    slidervalue = position.inSeconds.toDouble();
+
+    return Column(
+      children: [
+
+        Slider(value: slidervalue, min: 0.0,max: duration, onChanged: (value) {
+          
+            slidervalue = value;
+            audioPlayer.seek(Duration(seconds: slidervalue.toInt()));
+         
+        },),
+        // Padding(
+        //   padding: const EdgeInsets.symmetric(horizontal:20.0),
+        //   child: Row(
+        //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //     children: [
+        //       PlayerBuilder.currentPosition(player: audioPlayer, builder: (context, position) {
+        //       final mm = (position.inMinutes %60).toString().padLeft(2,'0');
+        //       final ss = (position.inSeconds %60).toString().padLeft(2,'0');
+        //       return Text('$mm:$ss');
+        //     },),
+        //     PlayerBuilder.current(player: audioPlayer, builder: (context, playing) {
+        //       final totalduration = playing.audio.duration;
+        //       final mm = (totalduration.inMinutes %60).toString().padLeft(2,'0');
+        //       final ss = (totalduration.inSeconds %60).toString().padLeft(2,'0');
+        //       return Text('$mm:$ss');
+        //     },)
+             
+           
+        //   ],),
+        // )
+      ],
+    );
+  },);
+}
+
+
+
+
+
+
+
 
 
 

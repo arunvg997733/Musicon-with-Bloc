@@ -1,6 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
 import 'package:flutter/material.dart';
-import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/function/function.dart';
 import 'package:musicon/model/songsmodel.dart';
@@ -8,6 +7,9 @@ import 'package:musicon/player/playercontroller.dart';
 import 'package:musicon/widgets/widget.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:text_scroll/text_scroll.dart';
+
+ bool isshuffle = false;
+ bool isloop = false;
 
 class Nowplayingscreen extends StatefulWidget {
    Nowplayingscreen({super.key,required this.data});
@@ -20,13 +22,15 @@ class Nowplayingscreen extends StatefulWidget {
 
 class _NowplayingscreenState extends State<Nowplayingscreen> {
 
-  bool play = false;
+ 
+
+  
 
  
   @override
   Widget build(BuildContext context) {
-  bool isfavourate = favouritechecking(widget.data);
-  bool isplaying = audioPlayer.isPlaying.value;
+
+  
      
     return  Scaffold(
       resizeToAvoidBottomInset: false,
@@ -39,10 +43,10 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
         }, icon: const Icon(Icons.arrow_back_ios,color: Colors.white,)),
       ),
       body: audioPlayer.builderCurrent(builder: (context, playing) {
-
         int songid  = int.parse(playing.audio.audio.metas.id!);
         findsong(songid);
-
+        Songsmodel songdata = findsongwithid(songid);
+        bool isfavourate = favouritechecking(songdata);
         return Container(
         decoration:const BoxDecoration(
             image: DecorationImage(image: AssetImage('assets/Background.png'),
@@ -52,9 +56,11 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
         child: Column(
           children: [
             Expanded(
+              flex: 3,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 50.0,vertical: 15),
                 child: Container(
+                  
                   width: double.infinity,
                   decoration: BoxDecoration(borderRadius: BorderRadius.circular(15),color: Colors.grey),
                   child: Padding(
@@ -65,8 +71,9 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
                 ),
               ),
             ),
-            TextScroll(playing.audio.audio.metas.title!,style: TextStyle(color: Colors.amber,fontSize: 25),mode: TextScrollMode.endless),
+            TextScroll(playing.audio.audio.metas.title!,style: const TextStyle(color: Colors.amber,fontSize: 25),mode: TextScrollMode.endless),
             Expanded(
+              flex: 2,
               child: Padding(
                 padding: const EdgeInsets.all(15.0),
                 child: Container(
@@ -87,80 +94,94 @@ class _NowplayingscreenState extends State<Nowplayingscreen> {
                                   playlistbottomsheet(context, widget.data);
                                 }, icon: const Icon(Icons.playlist_add)),
                                 IconButton(onPressed: () {
+                                  setState(() {
+                                    if(isshuffle == false){
+                                     audioPlayer.toggleShuffle();
+                                     isshuffle = true;
+                                  }else{
+                                    audioPlayer.toggleShuffle();
+                                     isshuffle = false;
+                                  }
+                                  });
                                   
-                                  
-                                }, icon: const Icon(Icons.shuffle)),
+                                }, icon:isshuffle==false ? const Icon(Icons.shuffle):const Icon(Icons.shuffle,color: Colors.amber,)),
                                 IconButton(onPressed: () {
-                                  audioPlayer.toggleShuffle();
-                                }, icon: const Icon(Icons.repeat)),
+                                  setState(() {
+                                    if(isloop == false){
+                                      audioPlayer.setLoopMode(LoopMode.single);
+                                      isloop = true;
+                                    }else{
+                                      audioPlayer.setLoopMode(LoopMode.playlist);
+                                      isloop = false;
+                                    }
+                                  });
+                                  
+                                }, icon:isloop ==false ? const Icon(Icons.repeat):const Icon(Icons.repeat,color: Colors.amber,)),
                                 IconButton(onPressed: () {
                                   setState(() {
                                     if(isfavourate==false){
-                                      addtofavoritedatabase(widget.data, context);
+                                      addtofavoritedatabase(songdata, context);
                                     }else{
-                                      deletefavouritelistontap(widget.data, context);
+                                      deletefavouritelistontap(songdata, context);
                                     }
                                     
                                   });
                                   
-                                }, icon:isfavourate==true?const Icon(Icons.favorite):Icon(Icons.favorite_border))
+                                }, icon:isfavourate==true?const Icon(Icons.favorite,color: Color.fromARGB(255, 185, 25, 14)):const Icon(Icons.favorite_border))
                               ],
                             ),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
                               IconButton(onPressed: () {
-                                  audioPlayer.previous();
-                                  final data = audioPlayer.current;
+                                 audioPlayer.previous();
                                 }, icon: const Icon(Icons.skip_previous_sharp,size: 40)),
                               IconButton(onPressed: () {
-                                  audioPlayer.seekBy(Duration(seconds: -10));
+                                  audioPlayer.seekBy(const Duration(seconds: -10));
                                 }, icon: const Icon(Icons.replay_10,size: 40)),
                               CircleAvatar(
                                 backgroundColor: Colors.black,
                                 radius: 22,
                                 child: Transform.scale(
                                   scale: 1.5,
-                                  child: IconButton(onPressed: () {
-                                     
-                                    setState(() {
-
-                                      if(play==false){
+                                  child: PlayerBuilder.isPlaying(
+                                      player: audioPlayer, 
+                                      builder: (context, isPlaying) {
+                                      return IconButton(onPressed: () {
+                                        if(isPlaying==false){
                                         audioPlayer.play();
-                                        play =true;
                                       }else{
                                         audioPlayer.pause();
-                                        play = false;
                                       }
-                                      // audioPlayer.playOrPause();
-                                    });
-                                    
-                                    }, icon:play==false? const Icon(Icons.play_arrow):const Icon(Icons.pause)),
+                                      }, icon:isPlaying==true? const Icon(Icons.pause):const Icon(Icons.play_arrow) );
+                                      },)
+                                  
                                 ),
                               ),
                               IconButton(onPressed: () {
-                                  audioPlayer.seekBy(Duration(seconds: 10));
+                                  audioPlayer.seekBy(const Duration(seconds: 10));
                                 }, icon: const Icon(Icons.forward_10,size: 40)),
                               IconButton(onPressed: ()async {
-                                 audioPlayer.next();
+                                audioPlayer.next();
                                 }, icon: const Icon(Icons.skip_next_sharp,size: 40)),
                             
                             ],
                             ),
-                            
-                            Slider(value: 0.0, onChanged: (value) {
-                             
-                            },)
+                            // Musicslider()
+                            Musicsliders()
+                            // musicslider()
+                           
+
                           ],
                         ),
                       ),
-
+        
                 ),
               ),
             )
           ],
         ),
-      );
+            );
       },)
     );
   }

@@ -18,11 +18,11 @@ class Mostplayedscreen extends StatelessWidget {
         leading: IconButton(onPressed: () {
           Navigator.of(context).pop();
         }, icon: const Icon(Icons.arrow_back_ios_sharp,color: Colors.white,)),
-        actions: [
-          IconButton(onPressed: () {
+        // actions: [
+        //   IconButton(onPressed: () {
             
-          }, icon: const Icon(Icons.search,color: Colors.white,))
-        ],
+        //   }, icon: const Icon(Icons.search,color: Colors.white,))
+        // ],
       ),
       body:Container(
         decoration:const BoxDecoration(
@@ -36,13 +36,13 @@ class Mostplayedscreen extends StatelessWidget {
             valueListenable: mostplayedlistnotifier, 
             builder:(BuildContext ctx, List<Songsmodel> newlist, Widget?child){
               return newlist.isNotEmpty? ListView.separated(
-                physics: BouncingScrollPhysics(),
+                physics: const BouncingScrollPhysics(),
                 itemBuilder: (context, index) {
                   final data = newlist[index];
                   return songbar3(data, context, index,mostplayedlistnotifier.value);
                 }, 
                 separatorBuilder: (context, index) {
-                  return SizedBox(height: 15,);
+                  return const SizedBox(height: 15,);
                 }, 
                 itemCount: newlist.length):Center(child: headtext('No Songs'));
         

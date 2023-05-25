@@ -29,9 +29,10 @@ class Namescreen extends StatelessWidget {
                 ),
                 headtext('Enter Your Name'),
                 TextField(
+                  textCapitalization: TextCapitalization.words,
                   textAlign: TextAlign.center,
                   controller: namectr,
-                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),filled: true,fillColor: Colors.grey),),
+                  decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(30)),filled: true,fillColor: Colors.white),),
                 ElevatedButton(onPressed: (){
                   setname(namectr.text,context);
                   setbool();
@@ -47,7 +48,7 @@ class Namescreen extends StatelessWidget {
                     ),
                 ElevatedButton(onPressed: (){
                   setbool();
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Mainscreen()));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Mainscreen()));
                 }, 
                   style: ButtonStyle(
                   shape: MaterialStateProperty.all(

@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:musicon/List/songnotifierlist.dart';
@@ -49,7 +48,7 @@ addtofavoritedatabase(Songsmodel data,context)async{
 
       flag = false;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Already Added'),
           behavior: SnackBarBehavior.floating,
           duration: Duration(seconds: 1),
@@ -64,8 +63,9 @@ addtofavoritedatabase(Songsmodel data,context)async{
   if(flag == true){
       favoriteDB.add(data);
       favouritedatabasetolist();
+      allsongnotifierlist.notifyListeners();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Added to Favouritelist'),
           behavior: SnackBarBehavior.floating,
           duration: Duration(seconds: 1),
@@ -100,13 +100,15 @@ deletefavouritelistontap(Songsmodel data,context)async{
   }
 
   favouriteDB.deleteAt(index);
+
   ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
+                        const SnackBar(
                           content: Text('Deleted from Favourite list'),
                           behavior: SnackBarBehavior.floating,
                           duration: Duration(seconds: 1),)
                           );
   favouritedatabasetolist();
+  allsongnotifierlist.notifyListeners();
 }
 
 
@@ -120,7 +122,7 @@ addtorecentdatabase(Songsmodel data)async{
     count++;
   }
 
-  if(count>4){
+  if(count>20){
     recentDB.deleteAt(0);
   }
   if(recentDB.values.isEmpty){
@@ -160,7 +162,7 @@ addtomostplayeddatabase(Songsmodel data)async{
     count++;
   }
 
-  if(count>4){
+  if(count>20){
     mostplayedDB.deleteAt(0);
   }
 
@@ -208,7 +210,7 @@ addplaylisttodatabase(String listname,List<Songsmodel> listarray,context)async{
   for(var element in playlistDB.values){
     if(listname == element.playlistname){
       flag = false;
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,));
     }
   }
 
@@ -216,7 +218,7 @@ addplaylisttodatabase(String listname,List<Songsmodel> listarray,context)async{
   final newplaylsit = Playlistmodel(playlistname: listname, playlistarray: listarray);
   playlistDB.add(newplaylsit);
   playlistdatabasetolist();
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Playlist Created'),behavior: SnackBarBehavior.floating,));
+  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Playlist Created'),behavior: SnackBarBehavior.floating,));
 
   }
   
@@ -242,6 +244,26 @@ deleteplaylistdatabase(Playlistmodel data)async{
   playlistdatabasetolist();
 }
 
+updateplaylisttodatabase(String listname,List<Songsmodel> listarray,context,int index)async{
+  final playlistDB = await Hive.openBox<Playlistmodel>('playlistDB');
+  bool flag =true;
+  for(var element in playlistDB.values){
+    if(listname == element.playlistname){
+      flag = false;
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,));
+    }
+  }
+
+  if(flag==true){
+  final newplaylsit = Playlistmodel(playlistname: listname, playlistarray: listarray);
+  playlistDB.putAt(index, newplaylsit);
+  playlistdatabasetolist();
+  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Playlist Updated'),behavior: SnackBarBehavior.floating,));
+
+  }
+  
+}
+
 //SONGS FROM PLAYLIST DATABASE//
 
 songaddtoplaylistdatabase(String listname,Songsmodel songdata,context)async{
@@ -255,7 +277,7 @@ songaddtoplaylistdatabase(String listname,Songsmodel songdata,context)async{
       for(var element in newplayarray){
         if(songdata.id == element.id){
           flag = false;
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1)));
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Already added'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1)));
           return;
         }
       }
@@ -265,7 +287,7 @@ songaddtoplaylistdatabase(String listname,Songsmodel songdata,context)async{
       playlistDB.putAt(index, newplaylist);
       newplaylistnotifier.notifyListeners();
       playlistnotifier.notifyListeners();
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Added to Playlist'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1),));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Added to Playlist'),behavior: SnackBarBehavior.floating,duration:Duration(seconds: 1),));
 
       }
       

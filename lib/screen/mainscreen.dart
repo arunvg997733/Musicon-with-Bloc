@@ -1,6 +1,5 @@
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/function/function.dart';
 import 'package:musicon/screen/allsongscreen.dart';
 import 'package:musicon/screen/homescreen.dart';
@@ -55,7 +54,7 @@ class _MainscreenState extends State<Mainscreen> {
             playlistshowdialog(context,);
           }, icon: const Icon(Icons.add_circle_outline,color: Colors.white,)):
           IconButton(onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>Searchscreen()));
+            Navigator.of(context).push(MaterialPageRoute(builder: (ctx)=>const Searchscreen()));
           }, icon: const Icon(Icons.search,color: Colors.white,))
 
         ],
@@ -63,23 +62,29 @@ class _MainscreenState extends State<Mainscreen> {
       ),
       extendBody: true,
       body: pages[currentindex],
-      bottomNavigationBar: CurvedNavigationBar(
-        animationCurve: Curves.bounceOut,
-        index: currentindex,
-        backgroundColor: const Color.fromARGB(163, 0, 0, 0),
-        buttonBackgroundColor: Colors.amber,
-        color: const Color.fromARGB(255, 63, 63, 63),
-        height: 55,
-        onTap: (value) {
-          setState(() {
-            currentindex = value;
-          });
-        },
-        items: const [
-          Icon(Icons.library_music_outlined),
-          Icon(Icons.home_outlined),
-          Icon(Icons.playlist_add_rounded),
-      ]),
+      bottomNavigationBar: 
+      Wrap(
+        children: [
+          const Minimusicplayer(),
+          CurvedNavigationBar(
+            animationCurve: Curves.bounceOut,
+            index: currentindex,
+            backgroundColor: Colors.black,
+            buttonBackgroundColor: Colors.amber,
+            color: const Color.fromARGB(255, 63, 63, 63),
+            height: 55,
+            onTap: (value) {
+              setState(() {
+                currentindex = value;
+              });
+            },
+            items: const [
+              Icon(Icons.library_music_outlined),
+              Icon(Icons.home_outlined),
+              Icon(Icons.playlist_add_rounded),
+          ]),
+        ],
+      ),
     );
   }
 }

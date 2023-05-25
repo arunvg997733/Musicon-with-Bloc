@@ -20,7 +20,7 @@ class Newplaylistscreen extends StatelessWidget {
         actions:[
           IconButton(onPressed: () {
             allsongbottomsheet(context, data.playlistname);
-          }, icon: Icon(Icons.add_circle_outline,color: Colors.white,))
+          }, icon: const Icon(Icons.add_circle_outline,color: Colors.white,))
         ],
         leading: IconButton(onPressed: () {
           Navigator.of(context).pop();
@@ -40,7 +40,7 @@ class Newplaylistscreen extends StatelessWidget {
               return songbar4(songdata, context, index, data,);
             }, 
             separatorBuilder: (context, index) {
-              return SizedBox(height: 15,);
+              return const SizedBox(height: 15,);
             }, 
             itemCount:data.playlistarray.length ):Center(child: headtext('No Songs'));
           })

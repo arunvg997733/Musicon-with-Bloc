@@ -1,5 +1,5 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:musicon/db_function.dart/db_function.dart';
 import 'package:musicon/function/function.dart';
 import 'package:musicon/player/playercontroller.dart';
 
@@ -15,13 +15,11 @@ class _SplashscreenState extends State<Splashscreen> {
   void initState(){
     // TODO: implement initState
     super.initState();
-    checkname(context);
-    checkpermission();
-    
+    Timer(const Duration(seconds: 3), () { 
+      checkpermission();
+      checkname(context);
+    });
    
-   
-    
-    
   }
   @override
   Widget build(BuildContext context) {

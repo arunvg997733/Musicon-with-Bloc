@@ -34,6 +34,7 @@ dependencies:
   curved_navigation_bar: ^1.0.3
   flutter:
     sdk: flutter
+  flutter_markdown: ^0.6.14
   get: ^4.6.5
   hive_flutter: ^1.1.0
   just_audio: ^0.9.32
@@ -61,6 +62,9 @@ flutter:
   assets:
     - assets/Background.png
     - assets/musiconlogo.png
+    - assets/musiconlightbackground.png
+    - assets/privacyandpolicy/privacyandpolicy.md
+    - assets/privacyandpolicy/termsandcondition.md
     # - images/a_dot_burr.jpeg
     # - images/a_dot_ham.jpeg
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -18,17 +18,16 @@ class Allsongscreen extends StatelessWidget {
             fit: BoxFit.cover)),
             child:Padding(
               padding: const EdgeInsets.all(15.0),
-              child: allsongnotifierlist!=null ? ValueListenableBuilder(
+              child: allsongnotifierlist!=null? ValueListenableBuilder(
                 valueListenable: allsongnotifierlist,
                 builder: (BuildContext ctx, List<Songsmodel> newallsonglist, Widget? child) {
                   return ListView.separated(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   itemBuilder: (contex, index) {
                     final data = newallsonglist[index];
-                    return songlistbar(data: data, context: context, index: index, songlist: allsongnotifierlist.value);
-                    // songbar(data, context,index,allsongnotifierlist.value);
+                    return Songlistbar(data: data, context: context, index: index, songlist: allsongnotifierlist.value);
                   }, 
-                  separatorBuilder: (context, index) => SizedBox(height: 15,), 
+                  separatorBuilder: (context, index) => const SizedBox(height: 15,), 
                   itemCount:newallsonglist.length );
                 },
                 
@@ -42,30 +41,6 @@ class Allsongscreen extends StatelessWidget {
     );
   }
 
-  // addsongtofavourite(String name,String artist,String uri, String id){
 
-  //    final newsong = Songsmodel(name: name, artist: artist, uri: uri, id: id);
-     
-  //    songnotifierlist.value.add(newsong);
-  //    songnotifierlist.notifyListeners();
-
-
-
-  // }
-
-  // addsong(SongModel data){
-
-  //   final name = data.displayNameWOExt;
-  //   final artist = data.artist;
-  //   final uri = data.uri;
-  //   final id = data.id;
-    
-
-  //   final newsongs = Songsmodel(name: name, artist: artist!, uri: uri!, id:id.toString() );
-
-  // songnotifierlist.value.add(newsongs);
-
-
-  // }
 
 }

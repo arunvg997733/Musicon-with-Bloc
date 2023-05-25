@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:musicon/List/songnotifierlist.dart';
 import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/model/songsmodel.dart';
 import 'package:musicon/screen/favouritescreen.dart';
 import 'package:musicon/screen/mostplayedscreen.dart';
 import 'package:musicon/screen/recentscreen.dart';
@@ -34,7 +36,7 @@ class _HomescreenState extends State<Homescreen> {
   List playcardnavigation = const [
     Favouritescreen(),
     Mostplayedscreen(),
-    recentscreen()
+    Recentscreen()
   ];
 
   @override
@@ -48,16 +50,24 @@ class _HomescreenState extends State<Homescreen> {
             image: DecorationImage(image: AssetImage('assets/Background.png'),
             fit: BoxFit.cover)
           ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                const Text('Hello,',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.w500),),
-                name1 == null ? headtext(''): headtext(name1!),
-                Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const Text('Hello',style: TextStyle(color: Colors.white,fontSize: 25,fontWeight: FontWeight.w500),),
+                    name1 == null ? headtext(''): headtext(name1!),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Container(
                   
-                  height: 180,
+                  height: 170,
                   color: Colors.transparent,
                   child: PageView.builder(
                     onPageChanged: (value) {
@@ -80,10 +90,37 @@ class _HomescreenState extends State<Homescreen> {
                     ); 
                   },controller: PageController(viewportFraction: 0.5),),
                   
-                )
+                ),
+              ),
           
-              ],
-            ),
+              Center(child: headtext('Recent List')),
+          
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: ValueListenableBuilder(
+                            valueListenable: recentlistnotifier, 
+                            builder: (BuildContext ctx, List<Songsmodel> recentlist, Widget? child){
+                  return recentlistnotifier.value.isNotEmpty?ListView.separated(
+                  
+                    physics: const BouncingScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final data = recentlist[index];
+                      return songbar3(data, context, index,recentlistnotifier.value);
+                    }, 
+                    separatorBuilder: (context, index) {
+                      return const SizedBox( height: 15,);
+                    }, 
+                    itemCount: recentlist.length):
+                    Center(child: headtext('No songs'));
+                        
+                            }),
+                ),
+              ),
+          
+              
+          
+            ],
           ),
         ),
       ),

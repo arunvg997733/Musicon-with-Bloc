@@ -33,10 +33,11 @@ class _SearchscreenState extends State<Searchscreen> {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: TextField(
+                textAlign: TextAlign.center,
                 onChanged: (value) {
                  search(value);
                 },
-                decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),fillColor: Colors.grey,filled: true)
+                decoration: InputDecoration(border: OutlineInputBorder(borderRadius: BorderRadius.circular(50)),fillColor: Colors.white,filled: true)
               ),
             ),
             Expanded(child: Padding(
@@ -44,10 +45,10 @@ class _SearchscreenState extends State<Searchscreen> {
                 child:searchlist.isNotEmpty ? ListView.separated(
                   itemBuilder: (context, index) {
                   final data = searchlist[index];
-                  return songlistbar(data: data, context: context, index: index, songlist: searchlist);
+                  return Songlistbar(data: data, context: context, index: index, songlist: searchlist);
                   // songbar(data, context,index,searchlist);
                 }, 
-                  separatorBuilder: (context, index) => SizedBox(height: 15,), 
+                  separatorBuilder: (context, index) => const SizedBox(height: 15,), 
                   itemCount: searchlist.length):
                   Center(child: headtext('No Songs'))
               )
