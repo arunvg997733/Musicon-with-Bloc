@@ -1,5 +1,5 @@
 import 'package:assets_audio_player/assets_audio_player.dart';
-import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/infrastructure/db_function.dart/db_function.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -29,13 +29,14 @@ checkpermission()async{
       }
     }
     for(var element in mp3songslist){
-      addallsongtodata(element);
+     await addallsongtodata(element);
     }
     Allsongdatabasetolist();
     favouritedatabasetolist();
     recentdatabasetolist();
     mostplayeddatabasetolist();
     playlistdatabasetolist();
+    
     
     
   }else{

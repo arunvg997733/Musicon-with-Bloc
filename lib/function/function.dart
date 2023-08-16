@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:musicon/List/songnotifierlist.dart';
-import 'package:musicon/db_function.dart/db_function.dart';
+import 'package:musicon/application/playlist/playlist_bloc.dart';
+import 'package:musicon/infrastructure/db_function.dart/db_function.dart';
 import 'package:musicon/model/playlistmodel.dart';
 import 'package:musicon/model/songsmodel.dart';
-import 'package:musicon/screen/mainscreen.dart';
-import 'package:musicon/screen/namescreen.dart';
-import 'package:musicon/widgets/widget.dart';
+import 'package:musicon/presentation/main/mainscreen.dart';
+import 'package:musicon/presentation/namescreen/namescreen.dart';
+import 'package:musicon/presentation/widgets/widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 
@@ -17,7 +19,7 @@ Future<void> setname(String name,context)async{
   }else{
     final SharedPreferences savename = await SharedPreferences.getInstance();
   savename.setString('name', name);
-  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=>const Mainscreen()),(route) => false,);
+  Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (ctx)=> Mainscreen()),(route) => false,);
   }
   
 
@@ -33,7 +35,7 @@ void checkname(context)async{
   final SharedPreferences check = await SharedPreferences.getInstance();
   final checkvalue = check.getBool('checkbool');
   if(checkvalue==true){
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>const Mainscreen()));
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=> Mainscreen()));
   }else{
     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx)=>Namescreen()));
   }
@@ -77,11 +79,13 @@ playlistshowdialog(context){
       actions: [
         
         TextButton(onPressed: () {
-          List<Songsmodel> newplaylist =[];
+          // List<Songsmodel> newplaylist =[];
           if(playlistnamectr.text.isEmpty){
             ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text('Please Enter Valid Name'),behavior: SnackBarBehavior.floating,));
           }else{
-            addplaylisttodatabase(playlistnamectr.text, newplaylist,context);
+            BlocProvider.of<PlaylistBloc>(context).add(Playlistadd(name: playlistnamectr.text));
+            // context.read<PlaylistBloc>().add(Playlistadd(name: playlistnamectr.text));
+            // addplaylisttodatabase(playlistnamectr.text, newplaylist,context);
             Navigator.pop(context);
           }
           
@@ -115,18 +119,20 @@ playlistbottomsheet(context,Songsmodel songdata){
               playlistshowdialog(context);
             }, icon: const Icon(Icons.add_box_outlined,color: Colors.white,)),
       
-            Expanded(child: ValueListenableBuilder(valueListenable: playlistnotifier, builder:(BuildContext ctx, List<Playlistmodel> newlist, Widget? child){
-                return playlistnotifier.value.isNotEmpty ? ListView.separated(
-                  itemBuilder: (context, index) {
-                    final data = newlist[index];
-                    return playlistbar(data,context,songdata);
-                  }, 
-                  separatorBuilder: (context, index) {
-                    return const SizedBox(height: 15,);
-                  }, 
-                  itemCount: newlist.length):Center(child: headtext('No Playlist'));
-              }),
-              )
+            BlocBuilder<PlaylistBloc, PlaylistState>(
+              builder: (context, state) {
+                return Expanded(child: state.playlist.isNotEmpty ? ListView.separated(
+                          itemBuilder: (context, index) {
+                            final data = state.playlist[index];
+                            return playlistbar(data,context,songdata);
+                          }, 
+                          separatorBuilder: (context, index) {
+                            return const SizedBox(height: 15,);
+                          }, 
+                          itemCount: state.playlist.length):Center(child: headtext('No Playlist')),
+                          );
+              },
+            )
           ],
         ),
       ),
@@ -208,7 +214,8 @@ playlistshowdialogupdate(context,Playlistmodel data,int index){
             ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text('Please Enter Valid Name'),behavior: SnackBarBehavior.floating,));
           }else{
             List<Songsmodel> newplaylist = data.playlistarray;
-            updateplaylisttodatabase(playlistnamectr.text, newplaylist,context,index);
+            BlocProvider.of<PlaylistBloc>(context).add(Playlistupdate(name: playlistnamectr.text, index: index, newlist: newplaylist));
+            // updateplaylisttodatabase(playlistnamectr.text, newplaylist,index);
             Navigator.pop(context);
           }
           

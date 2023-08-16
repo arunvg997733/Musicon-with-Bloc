@@ -12,9 +12,9 @@ ValueNotifier<List<Songsmodel>> recentlistnotifier = ValueNotifier([]);
 
 ValueNotifier<List<Songsmodel>> mostplayedlistnotifier = ValueNotifier([]);
 
-ValueNotifier<List<Playlistmodel>> playlistnotifier = ValueNotifier([]);
+List<Playlistmodel> playlistnotifier = [];
 
-ValueNotifier<List<Songsmodel>> newplaylistnotifier = ValueNotifier([]);
+List<Songsmodel> newplaylistnotifier = [];
 
 List templist = [];
 
